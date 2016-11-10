@@ -1,0 +1,28 @@
+{
+    "name": "noiselabs/nusoap-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony2 bundle for NuSOAP - SOAP Toolkit for PHP",
+    "keywords": ["soap", "symfony", "noiselabs"],
+    "homepage": "https://github.com/noiselabs/NoiselabsNuSOAPBundle",
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "Vítor Brandão",
+            "email": "vitor@noiselabs.org",
+            "homepage": "http://noiselabs.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "^2.0 || ^3.0",
+        "fergusean/nusoap": "0.9.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "NoiseLabs\\Bundle\\NuSOAPBundle\\": ""
+        }
+    }
+}

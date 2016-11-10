@@ -1,0 +1,180 @@
+<table id="table-presupuesto" class="table table-condensed">
+    <tbody>
+        {# start: INGRESOS #}
+        <tr>
+            <td colspan="1"></td>
+            <td class="tr-titulo">INGRESOS</td>
+            <td class="col-lg-4 text-center" colspan="4">Valor Unitario (VU) = C1*T1 + C2*T2</td>
+            {# <td class="col-lg-1"></td> #}
+            {# <td class="col-lg-1"></td> #}
+            {# <td class="col-lg-1"></td> #}
+            <td class="col-lg-1"></td>
+        </tr>
+        <tr class="tr-super-title">
+            <td class="td-descripcion">Item</td>
+            <td class="td-descripcion">Descripción</td>
+            <td class="td-bordered td-bordered-no-right">C1</td>
+            <td class="td-bordered td-bordered-no-right">T1</td>
+            <td class="td-bordered td-bordered-no-right">C2</td>
+            <td class="td-bordered">T2</td>
+            <td></td>
+        </tr>
+        {% for item in arrIngresos %}
+            <tr class="item-ingreso" data-class="item-ingreso">
+                <td class="text-center">
+                    {{ item.item }}
+                    <input type='hidden' class='numero_item' name='ingreso_item[{{ item.item }}]' value='{{ item.item }}'>
+                </td>
+                <td><input type='text' class='form-control ingreso_descripcion input-sm' name='ingreso_descripcion[{{ item.item }}]' value='{{ item.Descripcion }}' readonly='readonly'></td>
+                <td><input type='text' class='form-control ingreso_c1 input-sm input-monto' name='ingreso_c1[{{ item.item }}]' value='{{ item.C1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control ingreso_t1 input-sm input-monto' name='ingreso_t1[{{ item.item }}]' value='{{ item.T1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control ingreso_c2 input-sm input-monto' name='ingreso_c2[{{ item.item }}]' value='{{ item.C2 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control ingreso_t2 input-sm input-monto' name='ingreso_t2[{{ item.item }}]' value='{{ item.T2 | number_format(0, '.', '.') }}'></td>
+                <td>
+                    <div class='btn-group pull-right'>
+                        <a href='javascript:' class='btn-eliminar-item-antiguo btn btn-danger btn-xs' title='Eliminar'>
+                            Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="item-ingreso"></tr>
+        <tr>
+            <td></td>
+            <td>
+                <select id="select-item-ingreso" class='form-control'>
+                    <option value="null">Seleccionar Item</option>
+                    {% for codigo, item in arrItems.ingresos %}
+                        <option value="{{ codigo }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <a href='javascript:' class='btn-agregar-item-ingreso btn btn-success btn-sm btn-block' title='Agregar Item'>
+                    Agregar Item Ingreso
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {# end: INGRESOS #}
+        {# start: COSTOS FIJOS #}
+        <tr>
+            <td colspan="1"></td>
+            <td class="tr-titulo">COSTOS FIJOS</td>
+        </tr>
+        <tr class="tr-super-title">
+            <td class="td-descripcion">Item</td>
+            <td class="td-descripcion">Descripción</td>
+            <td class="td-bordered td-bordered-no-right">C1</td>
+            <td class="td-bordered td-bordered-no-right">T1</td>
+            <td class="td-bordered td-bordered-no-right">C2</td>
+            <td class="td-bordered">T2</td>
+            <td></td>
+        </tr>
+        {% for item in arrCostosFijos %}
+            <tr class="item-costo-fijo" data-class="item-costo-fijo">
+                <td class="text-center">
+                    {{ item.item }}
+                    <input type='hidden' class='numero_item' name='costo_fijo_item[{{ item.item }}]' value='{{ item.item }}'>
+                </td>
+                <td><input type='text' class='form-control costo_fijo_descripcion input-sm' name='costo_fijo_descripcion[{{ item.item }}]' value='{{ item.Descripcion }}' readonly='readonly'></td>
+                <td><input type='text' class='form-control costo_fijo_c1 input-sm input-monto' name='costo_fijo_c1[{{ item.item }}]' value='{{ item.C1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_fijo_t1 input-sm input-monto' name='costo_fijo_t1[{{ item.item }}]' value='{{ item.T1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_fijo_c2 input-sm input-monto' name='costo_fijo_c2[{{ item.item }}]' value='{{ item.C2 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_fijo_t2 input-sm input-monto' name='costo_fijo_t2[{{ item.item }}]' value='{{ item.T2 | number_format(0, '.', '.') }}'></td>
+                <td>
+                    <div class='btn-group pull-right'>
+                        <a href='javascript:' class='btn-eliminar-item-antiguo btn btn-danger btn-xs' title='Eliminar'>
+                            Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="item-costo-fijo"></tr>
+        <tr>
+            <td></td>
+            <td>
+                <select id="select-item-costos-fijos" class='form-control'>
+                    <option value="null">Seleccionar Item</option>
+                    {% for codigo, item in arrItems.costos_fijos %}
+                        <option value="{{ codigo }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <a href='javascript:' class='btn-agregar-item-costo-fijo btn btn-success btn-sm btn-block' title='Agregar Item'>
+                    Agregar Item Costo Fijo
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {# end: COSTOS FIJOS #}
+        {# start: COSTOS VARIABLES #}
+        <tr>
+            <td colspan="1"></td>
+            <td class="tr-titulo">COSTOS VARIABLES</td>
+        </tr>
+        <tr class="tr-super-title">
+            <td class="td-descripcion">Item</td>
+            <td class="td-descripcion">Descripción</td>
+            <td class="td-bordered td-bordered-no-right">C1</td>
+            <td class="td-bordered td-bordered-no-right">T1</td>
+            <td class="td-bordered td-bordered-no-right">C2</td>
+            <td class="td-bordered">T2</td>
+            <td></td>
+        </tr>
+        {% for item in arrCostosVariables %}
+            <tr class="item-costo-variable" data-class="item-costo-variable">
+                <td class="text-center">
+                    {{ item.item }}
+                    <input type='hidden' class='numero_item' name='costo_variable_item[{{ item.item }}]' value='{{ item.item }}'>
+                </td>
+                <td><input type='text' class='form-control costo_variable_descripcion input-sm' name='costo_variable_descripcion[{{ item.item }}]' value='{{ item.Descripcion }}' readonly='readonly'></td>
+                <td><input type='text' class='form-control costo_variable_c1 input-sm input-monto' name='costo_variable_c1[{{ item.item }}]' value='{{ item.C1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_variable_t1 input-sm input-monto' name='costo_variable_t1[{{ item.item }}]' value='{{ item.T1 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_variable_c2 input-sm input-monto' name='costo_variable_c2[{{ item.item }}]' value='{{ item.C2 | number_format(0, '.', '.') }}'></td>
+                <td><input type='text' class='form-control costo_variable_t2 input-sm input-monto' name='costo_variable_t2[{{ item.item }}]' value='{{ item.T2 | number_format(0, '.', '.') }}'></td>
+                <td>
+                    <div class='btn-group pull-right'>
+                        <a href='javascript:' class='btn-eliminar-item-antiguo btn btn-danger btn-xs' title='Eliminar'>
+                            Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="item-costo-variable"></tr>
+        <tr>
+            <td></td>
+            <td>
+                <select id="select-item-costos-variable" class='form-control'>
+                    <option value="null">Seleccionar Item</option>
+                    {% for codigo, item in arrItems.costos_variable %}
+                        <option value="{{ codigo }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <a href='javascript:' class='btn-agregar-item-costo-variable btn btn-success btn-sm btn-block' title='Agregar Item'>
+                    Agregar Item Costo Variable
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {# end: COSTOS VARIABLES #}
+    </tbody>
+</table>
+<div class="items-eliminados">
+    
+</div>

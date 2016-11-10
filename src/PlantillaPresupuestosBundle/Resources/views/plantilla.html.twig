@@ -1,0 +1,174 @@
+    <div class="col-md-6 pull-right">
+        <div class="well well-sm">
+            {% include 'PlantillaPresupuestosBundle:_parts:minimoExigido.html.twig' %}
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        {% include 'PlantillaPresupuestosBundle:_parts:detallePresupuesto.html.twig' %}
+    </div>
+</div>
+<script>
+    var GUARDANDO_PLANTILLA = false;
+
+    function agregarNuevoItem(seccion)
+    {
+        if (seccion == 'item-ingreso') {
+            nombreItem  = 'ingreso';
+            numeroItem  = $('#select-item-ingreso').val();
+            descripcion = $('#select-item-ingreso').find('option:selected').text();
+        } else if (seccion == 'item-costo-fijo') {
+            nombreItem  = 'costo_fijo';
+            numeroItem  = $('#select-item-costos-fijos').val();
+            descripcion = $('#select-item-costos-fijos').find('option:selected').text();
+        } else {
+            nombreItem  = 'costo_variable';
+            numeroItem  = $('#select-item-costos-variable').val();
+            descripcion = $('#select-item-costos-variable').find('option:selected').text();
+        }
+
+        if (numeroItem == 'null') {
+            return;
+        }
+
+        html       = "<tr class='"+seccion+"'>";
+
+        // Aquí va lo del número de ítem.
+        td         = "<td class='text-center'>";
+        td        += numeroItem;
+        td        += "<input type='hidden' class='" + nombreItem + "_item numero_item' name='" + nombreItem + "_nuevo_item[" + numeroItem + "]' value='" + numeroItem + "'>";
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del ítem.
+        td         = "<td>";
+        td        += "<input type='text' class='form-control " + nombreItem + "_descripcion input-sm' name='" + nombreItem + "_nuevo_descripcion[" + numeroItem + "]' value='" + descripcion + "' readonly='readonly'>";
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del c1.
+        td         = "<td>";
+        td        += "<input type='text' class='form-control " + nombreItem + "_c1 input-sm input-monto' name='" + nombreItem + "_nuevo_c1[" + numeroItem + "]' value='1'>"
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del t1.
+        td         = "<td>";
+        td        += "<input type='text' class='form-control " + nombreItem + "_t1 input-sm input-monto' name='" + nombreItem + "_nuevo_t1[" + numeroItem + "]' value='1'>"
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del c2.
+        td         = "<td>";
+        td        += "<input type='text' class='form-control " + nombreItem + "_c2 input-sm input-monto' name='" + nombreItem + "_nuevo_c2[" + numeroItem + "]' value='1'>"
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del t2.
+        td         = "<td>";
+        td        += "<input type='text' class='form-control " + nombreItem + "_t2 input-sm input-monto' name='" + nombreItem + "_nuevo_t2[" + numeroItem + "]' value='0'>"
+        td        += "</td>";
+        html      += td;
+
+        // Aquí va lo del action.
+        td         = "<td>";
+        td        += "<div class='btn-group pull-right'>";
+        td        += "<a href='javascript:' class='btn-eliminar-item btn btn-danger btn-xs' title='Eliminar'>"
+        td        += "Eliminar"
+        td        += "</a>";
+        td        += "</div>";
+        td        += "</td>";
+        html      += td;
+
+        html      += "</tr>";
+
+        $('.'+seccion).last().after(html);
+    }
+
+    function eliminarItem(elemento)
+    {
+        seccion = elemento.closest('tr').data('class');
+
+        nombreItem = '';
+
+        if (seccion == 'item-ingreso') {
+            nombreItem = 'ingreso';
+        } else if (seccion == 'item-costo-fijo') {
+            nombreItem = 'costo_fijo';
+        } else {
+            nombreItem = 'costo_variable';
+        }
+
+        numeroItem = elemento.closest('tr').find('.numero_item').val();
+        input      = "<input type='hidden' name='" + nombreItem + "_item_eliminado[" + numeroItem + "]' value='" + numeroItem + "'>";
+
+        $('.items-eliminados').append(input);
+
+        elemento.closest('tr').remove();
+    }
+
+    function guardarPlantilla(nuevo)
+    {
+        url = '{{ path('guardar_plantilla') }}';
+
+        empresa      = $('#select-empresa').val();
+        centroCostos = $('#select-centro-costos').val();
+        tipoCurso    = $('#select-tipo-curso').val();
+        plantilla    = $('#input-nombre-plantilla').val();
+        elementos    = $('#form-plantilla').serializeArray();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: { 
+                'nuevo': nuevo,
+                'empresa': empresa,
+                'centroCostos': centroCostos,
+                'tipoCurso': tipoCurso,
+                'plantilla': plantilla,
+                'elementos': elementos
+            },
+            success: function(data) {
+                alert('Plantilla Guardada Correctamente!');
+
+                location.reload();
+            }
+        });
+    }
+
+    $('.btn-agregar-item-ingreso').on('click', function() {
+        agregarNuevoItem('item-ingreso');
+    });
+
+    $('.btn-agregar-item-costo-fijo').on('click', function() {
+        agregarNuevoItem('item-costo-fijo');
+    });
+
+    $('.btn-agregar-item-costo-variable').on('click', function() {
+        agregarNuevoItem('item-costo-variable');
+    });
+
+    $('.btn-eliminar-item-antiguo').on('click', function() {
+        eliminarItem($(this));
+    });
+
+    $('.btn-guardar-plantilla').on('click', function() {
+        $('.btn-guardar-plantilla').addClass('hide');
+        $('.btn-guardar-como-plantilla').addClass('hide');        
+        $('#input-nombre-plantilla').val( $('#select-plantilla').val() );
+
+        guardarPlantilla(false);
+    });
+
+    $('.btn-guardar-como-plantilla').on('click', function() {
+        $('.btn-guardar-plantilla').addClass('hide');
+        $('.btn-guardar-como-plantilla').addClass('hide');
+        var nombrePlantilla = prompt("Ingrese el nombre de la nueva plantilla");
+
+        $('#input-nombre-plantilla').val(nombrePlantilla);
+
+        guardarPlantilla(true);
+    });
+</script>

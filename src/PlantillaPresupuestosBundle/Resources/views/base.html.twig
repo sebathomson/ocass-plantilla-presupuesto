@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Presupuestos-OCASS</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" href="{{ asset('bundles/plantillapresupuestos/css/bootstrap/bootstrap.min.css') }}">
+
+	<style>
+		#table-encabezado-empresa th {
+			width: 130px;
+		}
+		#table-presupuesto {
+			border: 1px solid #333!important;
+			border-collapse: initial;
+		}
+		#table-presupuesto .tr-super-title td {
+			vertical-align: bottom;
+			font-weight: bolder;
+		}
+		#table-presupuesto .td-descripcion {
+			text-align: center;
+		}
+		#table-presupuesto .tr-titulo {
+			text-align: center;
+			background-color: aliceblue;
+			font-weight: bolder;
+		}
+		#table-presupuesto .td-bordered {
+			border: 1px solid #333!important;
+			text-align: center;
+		}
+		#table-presupuesto .td-bordered-no-right {
+			border-right: 0px solid #fff!important;
+		}
+		#table-presupuesto .td-bordered-no-bottom {
+			border-bottom: 0px solid #fff!important;
+		}
+		#table-presupuesto .td-rotate-45 {
+			height: 90px;
+			position: relative;
+			vertical-align: bottom;
+			padding: 0;
+			font-size: 12px;
+			line-height: 0.8;
+		}
+		#table-presupuesto .td-rotate-45 > div{
+			position: relative;
+			top: 0px;
+			left: 42px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
+			height: 100%;
+			transform:skew(-45deg,0deg);
+			overflow: hidden;
+			border: 1px solid #333;
+		}
+		#table-presupuesto .td-rotate-45 span {
+			transform:skew(45deg,0deg) rotate(315deg);
+			position: absolute;
+			bottom: 33px;
+			left: -30px;
+			display: inline-block;
+			width: 92px; /* 80 / cos(45) - 40 cos (45) = 85 where 80 is the height of the cell, 40 the width of the cell and 45 the transform angle*/
+			text-align: left;
+		}
+		.valign {
+			vertical-align: middle!important;
+		}
+
+		.table-condensed>thead>tr>th, 
+		.table-condensed>tbody>tr>th, 
+		.table-condensed>tfoot>tr>th, 
+		.table-condensed>thead>tr>td, 
+		.table-condensed>tbody>tr>td, 
+		.table-condensed>tfoot>tr>td {
+			padding: 0px!important;
+		}
+		.input-monto {
+			text-align: right;
+		}
+		#table-minimo-exigido {
+			margin-bottom: 0!important;
+		}
+		#crear-plantilla {
+			margin-top: -17px!important
+		}
+	</style>
+</head>
+<body>
+	{% block body %}
+	{% endblock %}
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	{% block javascripts %}
+	{% endblock %}
+</body>
+</html>

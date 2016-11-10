@@ -1,0 +1,13 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: d051a934a1cd0df116aa8581c624e6888aa8436f
+    urlWebService: 'http://201.236.20.29/WS_validar_seguridad_usuario/WebService.asmx?wsdl'

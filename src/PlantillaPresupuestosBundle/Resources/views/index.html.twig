@@ -1,0 +1,231 @@
+{% extends 'PlantillaPresupuestosBundle::base.html.twig' %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div id="form-base-plantilla" class="col-lg-4">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="select" class="col-lg-4 control-label"><strong>Empresa</strong></label>
+					<div class="col-lg-8">
+						<select id="select-empresa" class="form-control" id="select-tipo-curso" name="select-tipo-curso">
+							<option value="null">Seleccionar Empresa</option>
+							{% for codigo, empresa in seguridadUsuarios.arrEmpresas %}
+								<option value="{{ codigo }}">{{ empresa }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>				
+				<div class="form-group">
+					<label for="select" class="col-lg-4 control-label"><strong>Centro de Costos</strong></label>
+					<div class="col-lg-8">
+						<select id="select-centro-costos" class="form-control" id="select-tipo-curso" name="select-tipo-curso">
+							<option value="null">Seleccionar Centro de Costos</option>
+							{% for sucursal in seguridadUsuarios.arrSucursales %}
+								<option value="{{ sucursal.codigo }}" class="hide empresa-{{ sucursal.empresa }}">{{ sucursal.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>				
+				<div class="form-group">
+					<label for="select" class="col-lg-4 control-label"><strong>Tipo de Curso</strong></label>
+					<div class="col-lg-8">
+						<select id="select-tipo-curso" class="form-control" id="select-tipo-curso" name="select-tipo-curso">
+							<option value="null">Seleccionar Tipo de Curso</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="select" class="col-lg-4 control-label"><strong>Utilizar Plantilla</strong></label>
+					<div class="col-lg-8">
+						<select id="select-plantilla" class="form-control" id="select-base-plantilla" name="select-base-plantilla">
+							<option value="null">Seleccionar Base de Plantilla</option>
+							<option value="nueva">Nueva Plantilla</option>
+						</select>
+						<input type="hidden" id="input-nombre-plantilla">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4"></label>
+					<div class="col-lg-8">
+						<a id="btn-crear-plantilla" href="javascript:" class="btn btn-primary"><span id="modo-plantilla">Crear</span> Plantilla</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div id="table-base-plantilla" class="col-lg-4 hide">
+			<table class="table table-condensed">
+				<tr>
+					<th>Empresa</th>
+					<td><span id="span-empresa"></span></td>
+				</tr>
+				<tr>
+					<th>Centro de Costos</th>
+					<td><span id="span-centro-costos"></span></td>
+				</tr>
+				<tr>
+					<th>Tipo de Curso</th>
+					<td><span id="span-tipo-curso"></span></td>
+				</tr>
+				<tr>
+					<th>Plantilla</th>
+					<td><span id="span-plantilla"></span></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<a href='{{ path('homepage') }}' class='btn btn-default btn-sm' title='Volver'>
+							Volver
+						</a>
+						<a href='javascript:' class='btn-guardar-como-plantilla btn btn-info btn-sm' title='Guardar Como Plantilla'>
+							Guardar Como
+						</a>
+						<a href='javascript:' class='btn-guardar-plantilla btn btn-success btn-sm' title='Guardar Plantilla'>
+							Guardar
+						</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<form id="form-plantilla" name="form-plantilla" action="">
+			<div id="crear-plantilla">
+
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		function obtenerTiposCurso() {
+			path = '{{ path('obtener_tipos_curso') }}';
+
+			$('#select-tipo-curso').val('null');
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					empresa: $('#select-empresa').val(),
+					centrocostos: $('#select-centro-costos').val()
+				},
+			})
+			.success(function(data) {
+				option = '<option value="null">Seleccionar Tipo de Curso</option>';
+
+				$.each(data, function(index, val) {
+					option += '<option ';
+					option += 'value="'+ val +'" > '+ val +'';
+					option += '</option>';
+				});
+
+				$('#select-tipo-curso').html(option);
+			});
+		}
+		function obtenerPlantillas() {
+			path = '{{ path('obtener_plantillas') }}';
+
+			$('#select-plantilla').val('null');
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					empresa: $('#select-empresa').val(),
+					centrocostos: $('#select-centro-costos').val(),
+					tipocurso: $('#select-tipo-curso').val()
+				},
+			})
+			.success(function(data) {
+				option  = '<option value="null">Seleccionar Base de Plantilla</option>';
+				option += '<option value="nueva">Nueva Plantilla</option>';
+
+				$.each(data, function(index, val) {
+					option += '<option ';
+					option += 'value="'+ val +'" > '+ val +'';
+					option += '</option>';
+				});
+
+				$('#select-plantilla').html(option);
+			});
+		}
+	</script>
+
+	<script>
+		$(document).on('ready', function() {
+			$('#select-empresa').on('change', function() {
+				empresa = $(this).val();
+				$('#select-centro-costos').val('null');
+				$('#select-tipo-curso').val('null');
+
+				$('#select-centro-costos').find('option').each(function(index, el) {
+					if (!$(this).hasClass('hide') && $(this).val() != 'null' ) {
+						$(this).addClass('hide');
+					}
+				});
+
+				$('#select-centro-costos').find('.empresa-'+empresa).each(function(index, el) {
+					$(this).removeClass('hide');
+				});
+			});
+
+			$('#select-centro-costos').on('change', function() {
+				obtenerTiposCurso();
+			});
+
+			$('#select-tipo-curso').on('change', function() {
+				obtenerPlantillas();
+			});
+
+			$('#select-plantilla').on('change', function() {
+				value = $(this).val();
+
+				if (value == 'nueva') {
+					$('#modo-plantilla').text('Crear');
+				} else {
+					$('#modo-plantilla').text('Utilizar');
+				}
+			});
+
+			$('#btn-crear-plantilla').on('click', function() {
+				empresa       = $('#select-empresa').val();
+				centroCostos  = $('#select-centro-costos').val();
+				tipoCurso     = $('#select-tipo-curso').val();
+				basePlantilla = $('#select-plantilla').val();
+
+				$('#span-empresa').text( $('#select-empresa').find('option:selected').text() );
+				$('#span-centro-costos').text( $('#select-centro-costos').find('option:selected').text() );
+				$('#span-tipo-curso').text(tipoCurso);
+				$('#span-plantilla').text(basePlantilla);
+
+				if ( empresa == 'null' || centroCostos == 'null' || tipoCurso == 'null' || basePlantilla == 'null') {
+					return;
+				}
+
+				url = '{{ path('cargar_plantilla') }}';
+
+				if (basePlantilla == 'nueva') {
+					url = '{{ path('crear_plantilla') }}';
+
+					$('.btn-guardar-plantilla').addClass('hide');
+				}
+
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: { 
+						'empresa': empresa,
+						'centroCostos': centroCostos,
+						'tipoCurso': tipoCurso,
+						'basePlantilla': basePlantilla
+					},
+					success: function(data) {
+						$('#form-base-plantilla').addClass('hide');
+						$('#crear-plantilla').html(data);
+						$('#table-base-plantilla').removeClass('hide');
+					}
+				});
+			});
+		});
+	</script>
+{% endblock %}
